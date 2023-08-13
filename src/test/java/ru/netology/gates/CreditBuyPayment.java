@@ -4,21 +4,20 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.datas.Card;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class CreditBuyPayment {
-    private SelenideElement heading = $("h3").getSelectedOptions().findBy(exactText("Кредит по данным карты"));
+    private SelenideElement heading = $(byText("Кредит по данным карты"));
     private SelenideElement cardNumberField = $(byText("Номер карты")).parent().$("[class=\"input__control\"]");
     private SelenideElement monthField = $(byText("Месяц")).parent().$("[class=\"input__control\"]");
     private SelenideElement yearField = $(byText("Год")).parent().$("[class=\"input__control\"]");
     private SelenideElement cardHolderField = $(byText("Владелец")).parent().$("[class=\"input__control\"]");
     private SelenideElement cvvField = $(byText("CVC/CVV")).parent().$("[class=\"input__control\"]");
-    private SelenideElement approvedOperation = $(byText("Операция одобрена Банком.")).parent().$("[class=\"notification__content\"]");
-    private SelenideElement failureOperation = $(byText("Ошибка! Банк отказал в проведении операции.")).parent().$("[class=\"notification__content\"]");
+    private SelenideElement approvedOperation = $(byText("Операция одобрена Банком."));
+    private SelenideElement failureOperation = $(byText("Ошибка! Банк отказал в проведении операции."));
     private SelenideElement wrongFormatError = $(byText("Неверный формат"));
     private ElementsCollection wrongFormat4Error = $$(byText("Неверный формат"));
     private SelenideElement cardExpirationDateError = $(byText("Неверно указан срок действия карты"));
