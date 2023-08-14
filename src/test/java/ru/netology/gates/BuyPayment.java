@@ -1,16 +1,18 @@
 package ru.netology.gates;
 
+
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.datas.Card;
 
-import static com.codeborne.selenide.Condition.*;
+
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 
 public class BuyPayment {
-    private SelenideElement heading = $(byText("Оплата по карте"));
+    private SelenideElement heading = $$("h3").find(exactText("Оплата по карте"));
     private SelenideElement cardNumberField = $(byText("Номер карты")).parent().$("[class=\"input__control\"]");
     private SelenideElement monthField = $(byText("Месяц")).parent().$("[class=\"input__control\"]");
     private SelenideElement yearField = $(byText("Год")).parent().$("[class=\"input__control\"]");
@@ -32,7 +34,7 @@ public class BuyPayment {
     }
 
     public void inputData(Card card) {
-        cardNumberField.setValue(card.getCardNumber());
+        cardNumberField.setValue( card.getCardNumber());
         monthField.setValue(card.getMonth());
         yearField.setValue(card.getYear());
         cardHolderField.setValue(card.getOwner());

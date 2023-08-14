@@ -38,7 +38,7 @@ public class SQLHelper {
 
     public static String getOrderCount() {
         Long count = null;
-        val codesSQL = " SELECT COUNT(*) FROM order_entity";
+        val codesSQL = " SELECT COUNT(*) FROM order_entity;";
         val runner = new QueryRunner();
         try (val conn = DriverManager.getConnection(url, user, password)) {
             count = runner.query(conn, codesSQL, new ScalarHandler<>());
