@@ -2,28 +2,20 @@ package ru.netology.tests;
 
 
 
-
-import lombok.val;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ru.netology.datas.DataHelper;
 import ru.netology.datas.SQLHelper;
+import ru.netology.gates.BuyPayment;
 import ru.netology.gates.PaymentPage;
 
 
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-
 public class BuyPaymentTest {
-    public static String url = System.getProperty("sut.url");
+    PaymentPage startPage = open("http://localhost:8080/", PaymentPage.class);
 
-    @BeforeEach
-    public void openPage() {
-        open(url);
-    }
+
 
     @AfterEach
     public void cleanBase() {
@@ -34,155 +26,192 @@ public class BuyPaymentTest {
 
     @Test
     void buyPositiveAllFieldValidApproved() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getApprovedCard());
-        payment.waitNotificationApproved();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getApprovedCard();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationApproved();
         assertEquals("APPROVED", SQLHelper.getPaymentStatus());
     }
 
     @Test
     void buyPositiveAllFieldValidDeclined() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getDeclinedCard());
-        payment.waitNotificationFailure();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getDeclinedCard();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationFailure();
         assertEquals("DECLINED", SQLHelper.getPaymentStatus());
+
+    }
+
+    @Test
+    void buyNegativeAllFieldEmpty() {
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getEmptyCard();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat4Fields();
+        assertEquals("0", SQLHelper.getOrderCount());
+
     }
 
     @Test
     void buyNegativeNumberCard15Symbols() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getFifteenNumberCardNumber());
-        payment.waitNotificationWrongFormat();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getNumberCard15Symbols();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeCardNotInDatabase() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getFakerNumberCardNumber());
-        payment.waitNotificationFailure();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardNotInDatabase();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationFailure();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeMonth1Symbol() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getOneNumberMonth());
-        payment.waitNotificationWrongFormat();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardMonth1Symbol();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeMonthOver12() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getThirteenMonthInField());
-        payment.waitNotificationExpirationDateError();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardMonthOver12();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationExpirationDateError();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeMonth00ThisYear() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getZeroMonthInField());
-        payment.waitNotificationExpirationDateError();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardMonth00ThisYear();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationExpirationDateError();
+        assertEquals("0", SQLHelper.getOrderCount());
+    }
+    @Test
+    void creditNegativeMonth00OverThisYear() {
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardMonth00OverThisYear();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationExpirationDateError();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
-    void buyNegativeMonth00OverThisYear() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getPreviousMonthInField());
-        payment.waitNotificationExpirationDateError();
+    void buyNegativeYear00() {
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardYear00();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationExpiredError();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
-    void buyNegativeYear() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getEmptyYear());
-        payment.waitNotificationExpiredError();
+    void buyNegativeYear1Symbol() {
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardYear1Symbol();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
     }
-
 
     @Test
     void buyNegativeYearUnderThisYear() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getPreviousYearInField());
-        payment.waitNotificationExpiredError();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardYearUnderThisYear();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationExpiredError();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeYearOverThisYearOn6() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getPlusSixYearInField());
-        payment.waitNotificationExpirationDateError();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardYearOverThisYearOn6();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationExpirationDateError();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeCvv1Symbol() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getOneNumberInFieldCVV());
-        payment.waitNotificationWrongFormat();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardCvv1Symbol();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeCvv2Symbols() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getOTwoNumberInFieldCVV());
-        payment.waitNotificationWrongFormat();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardCvv2Symbols();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeOwner1Word() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getOnlySurnameInFieldName());
-        payment.waitNotificationWrongFormat();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardHolder1Word();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeOwnerCyrillic() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getRusName());
-        payment.waitNotificationWrongFormat();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardHolderCirillic();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
-    void buyNumberInName() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getNumberInFieldName());
-        payment.waitNotificationWrongFormat();
+    void buyNegativeOwnerNumeric() {
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardHolderNumeric();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
     @Test
     void buyNegativeOwnerSpecialSymbols() {
-        val startPage = new PaymentPage();
-        val payment = startPage.goToBuyPage();
-        payment.inputData(DataHelper.getSpecialSymbolInFieldName());
-        payment.waitNotificationWrongFormat();
+        startPage.orderCardPage();
+        var cardInfo = DataHelper.getCardSpecialSymbols();
+        var orderCardPage = new BuyPayment();
+        orderCardPage.insertCardData(cardInfo);
+        orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
     }
 }
