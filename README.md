@@ -5,7 +5,7 @@
 # Требования для запуска тестов:
 ## 1. Необходимое окружение.
 ### Инструменты: IntelliJ IDEA, Git, GitHub, Docker Desktop, Java, MySQL, PostgreSQL.
-## 2 Запуск Тестов:
+## 2. Запуск Тестов:
 1. Запустить Docker Desktop, предварительно зарегестрироваться на Docker Hub;
 1. В IntelliJ IDEA открыть терминал;
 2. Выполнить команду: `docker-compose up`;
