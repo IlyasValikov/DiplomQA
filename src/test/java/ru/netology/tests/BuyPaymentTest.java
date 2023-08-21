@@ -188,7 +188,7 @@ public class BuyPaymentTest {
     @Test
     void buyNegativeOwnerCyrillic() {
         startPage.orderCardPage();
-        var cardInfo = DataHelper.getCardHolderCirillic();
+        var cardInfo = DataHelper.getCardHolderCyrillic();
         var orderCardPage = new BuyPayment();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();

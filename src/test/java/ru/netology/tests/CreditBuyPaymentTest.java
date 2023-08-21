@@ -189,7 +189,7 @@ public class CreditBuyPaymentTest {
     @Test
     void creditNegativeOwnerCyrillic() {
         startPage.creditPage();
-        var cardInfo = DataHelper.getCardHolderCirillic();
+        var cardInfo = DataHelper.getCardHolderCyrillic();
         var creditPage = new CreditBuyPayment();
         creditPage.insertCardData(cardInfo);
         creditPage.waitNotificationWrongFormat();

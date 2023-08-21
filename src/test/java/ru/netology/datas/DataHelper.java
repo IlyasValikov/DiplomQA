@@ -13,11 +13,11 @@ public class DataHelper {
     }
 
     public static CardInfo getApprovedCard() {
-        return new CardInfo("4444444444444441", getShiftedMonth(2), getShiftedYear(0), "Ivan Vasilev", "888");
+        return new CardInfo("4444444444444441", getShiftedMonth(2), getShiftedYear(0), "Ivan Ivanov", "888");
     }
 
     public static CardInfo getDeclinedCard() {
-        return new CardInfo("4444444444444442", getShiftedMonth(3), getShiftedYear(1), "Ivan Vasilev", "777");
+        return new CardInfo("4444444444444442", getShiftedMonth(3), getShiftedYear(1), "Ivan Ivanov", "777");
     }
 
     public static CardInfo getEmptyCard() {
@@ -146,7 +146,7 @@ public class DataHelper {
         return new CardInfo("4444444444444441", month, year, holder, cvv);
     }
 
-    public static CardInfo getCardHolderCirillic() {
+    public static CardInfo getCardHolderCyrillic() {
         var faker = new Faker(new Locale("ru"));
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = getShiftedMonth(1);
