@@ -4,7 +4,7 @@
 
 # Требования для запуска тестов:
 ## 1. Необходимое окружение.
-### Инструменты: IntelliJ IDEA, Git, GitHub, Docker Desktop, Java, MySQL, PostgerSQL.
+### Инструменты: IntelliJ IDEA, Git, GitHub, Docker Desktop, Java, MySQL, PostgreSQL.
 ## 2 Запуск Тестов:
 1. Запустить Docker Desktop, предварительно зарегестрироваться на Docker Hub;
 1. В IntelliJ IDEA открыть терминал;
@@ -17,4 +17,4 @@
 7. В IntelliJ IDEA дважды нажать Ctrl и в командной строке «Run Anything» выполнить одну из команд в зависимости от выбранной СУБД:
 - **MySQL:** `./gradlew clean test "-Ddb.url=jdbc:mysql://localhost:3306/app"`
 - **PostgreSQL:** `./gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"`
-8. Перейти в терминале по сыылке на отчет gradle после завершения всех тестов.
+8. Перейти в терминале по ссылке на отчет gradle после завершения всех тестов.
