@@ -22,6 +22,13 @@
 ![новое1](https://github.com/IlyasValikov/DiplomQA/assets/127608608/ae4a768d-1caf-4c28-8eb8-4831b1505335)
 ![новое2](https://github.com/IlyasValikov/DiplomQA/assets/127608608/62f7281b-9750-4064-94e1-9300fe777040)
 ![новое3](https://github.com/IlyasValikov/DiplomQA/assets/127608608/1fecf01d-0548-46d4-8cd2-0a76c24ad481)
+*Отчет allure:
+![alll](https://github.com/IlyasValikov/DiplomQA/assets/127608608/3fd5f00e-1bdc-4b6d-9cf7-6300fe375248)
+![buy](https://github.com/IlyasValikov/DiplomQA/assets/127608608/d6ae1524-c60f-4658-bcc7-f156ecdda1d4)
+![credit](https://github.com/IlyasValikov/DiplomQA/assets/127608608/22332ad6-0942-4ff5-a670-9f985285949a)
+
+
+
 
 ## Рекомендации:
 * Исправить выявленные баги в приложении (см. Issues).
