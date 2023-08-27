@@ -51,3 +51,7 @@ out/
 /build
 
 /data
+/.gradle/
+/.idea/
+/build/
+/data/
