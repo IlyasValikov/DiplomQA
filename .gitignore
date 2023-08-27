@@ -44,13 +44,6 @@ out/
 !**/src/main/**
 !**/src/test/**
 
-/.idea
-
-/.gradle
-
-/build
-
-/data
 /.gradle/
 /.idea/
 /build/
