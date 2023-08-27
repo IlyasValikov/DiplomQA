@@ -2,10 +2,11 @@ package ru.netology.tests;
 
 
 
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.datas.DataHelper;
 import ru.netology.datas.SQLHelper;
-import ru.netology.gates.BuyPayment;
 import ru.netology.gates.PaymentPage;
 
 
@@ -13,7 +14,20 @@ import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BuyPaymentTest {
-    PaymentPage startPage = open("http://localhost:8080/", PaymentPage.class);
+    @BeforeEach
+    public void start() {
+        open("http://localhost:8080");
+    }
+
+    @BeforeAll
+    static void setAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDown() {
+        SelenideLogger.removeListener("allure");
+    }
 
 
 
@@ -26,9 +40,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyPositiveAllFieldValidApproved() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getApprovedCard();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationApproved();
         assertEquals("APPROVED", SQLHelper.getPaymentStatus());
@@ -36,9 +50,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyPositiveAllFieldValidDeclined() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getDeclinedCard();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationFailure();
         assertEquals("DECLINED", SQLHelper.getPaymentStatus());
@@ -47,9 +61,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeAllFieldEmpty() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getEmptyCard();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat4Fields();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -58,9 +72,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeNumberCard15Symbols() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getNumberCard15Symbols();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -68,9 +82,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeCardNotInDatabase() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardNotInDatabase();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationFailure();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -78,9 +92,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeMonth1Symbol() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardMonth1Symbol();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -88,9 +102,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeMonthOver12() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardMonthOver12();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationExpirationDateError();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -98,18 +112,18 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeMonth00ThisYear() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardMonth00ThisYear();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationExpirationDateError();
         assertEquals("0", SQLHelper.getOrderCount());
     }
     @Test
     void creditNegativeMonth00OverThisYear() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardMonth00OverThisYear();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationExpirationDateError();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -117,9 +131,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeYear00() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardYear00();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationExpiredError();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -127,9 +141,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeYear1Symbol() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardYear1Symbol();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -137,9 +151,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeYearUnderThisYear() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardYearUnderThisYear();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationExpiredError();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -147,9 +161,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeYearOverThisYearOn6() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardYearOverThisYearOn6();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationExpirationDateError();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -157,9 +171,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeCvv1Symbol() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardCvv1Symbol();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -167,9 +181,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeCvv2Symbols() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardCvv2Symbols();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -177,9 +191,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeOwner1Word() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardHolder1Word();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -187,9 +201,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeOwnerCyrillic() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardHolderCyrillic();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -197,9 +211,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeOwnerNumeric() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardHolderNumeric();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());
@@ -207,9 +221,9 @@ public class BuyPaymentTest {
 
     @Test
     void buyNegativeOwnerSpecialSymbols() {
-        startPage.orderCardPage();
+        var startPage = new PaymentPage();
         var cardInfo = DataHelper.getCardSpecialSymbols();
-        var orderCardPage = new BuyPayment();
+        var orderCardPage = startPage.orderCardPage();
         orderCardPage.insertCardData(cardInfo);
         orderCardPage.waitNotificationWrongFormat();
         assertEquals("0", SQLHelper.getOrderCount());

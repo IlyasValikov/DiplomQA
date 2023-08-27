@@ -8,10 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class DataHelper {
-    private String generateDate(int addDays, int addMonths, int addYears, String pattern) {
-        return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
-    }
 
+    public static Faker faker = new Faker(new Locale("en"));
     public static CardInfo getApprovedCard() {
         return new CardInfo("4444444444444441", getShiftedMonth(2), getShiftedYear(0), "Ivan Ivanov", "888");
     }
@@ -33,7 +31,6 @@ public class DataHelper {
     }
 
     public static CardInfo getNumberCard15Symbols() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = getShiftedMonth(1);
         var year = getShiftedYear(1);
@@ -43,7 +40,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardNotInDatabase() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = getShiftedMonth(1);
         var year = getShiftedYear(1);
@@ -52,7 +48,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardMonth1Symbol() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = faker.number().digit();
         var year = getShiftedYear(1);
@@ -61,7 +56,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardMonthOver12() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var year = getShiftedYear(1);
         var cvv = faker.number().digits(3);
@@ -69,7 +63,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardMonth00ThisYear() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var year = getShiftedYear(0);
         var cvv = faker.number().digits(3);
@@ -77,7 +70,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardMonth00OverThisYear() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var year = getShiftedYear(1);
         var cvv = faker.number().digits(3);
@@ -85,7 +77,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardYear1Symbol() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = getShiftedMonth(1);
         var year = faker.number().digit();
@@ -94,7 +85,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardYearOverThisYearOn6() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = getShiftedMonth(1);
         var year = getShiftedYear(6);
@@ -103,7 +93,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardYearUnderThisYear() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = getShiftedMonth(1);
         var year = getShiftedYear(-1);
@@ -112,7 +101,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardYear00() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = getShiftedMonth(1);
         var cvv = faker.number().digits(3);
@@ -120,7 +108,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardCvv1Symbol() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = getShiftedMonth(1);
         var year = getShiftedYear(1);
@@ -129,7 +116,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardCvv2Symbols() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.name().lastName();
         var month = getShiftedMonth(1);
         var year = getShiftedYear(1);
@@ -138,7 +124,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardHolder1Word() {
-        var faker = new Faker();
         var holder = faker.name().firstName();
         var month = getShiftedMonth(1);
         var year = getShiftedYear(1);
@@ -156,7 +141,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardHolderNumeric() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " " + faker.number().digit();
         var month = getShiftedMonth(1);
         var year = getShiftedYear(1);
@@ -165,7 +149,6 @@ public class DataHelper {
     }
 
     public static CardInfo getCardSpecialSymbols() {
-        var faker = new Faker();
         var holder = faker.name().firstName() + " %$ * &";
         var month = getShiftedMonth(1);
         var year = getShiftedYear(1);

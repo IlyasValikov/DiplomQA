@@ -43,3 +43,11 @@ out/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+
+/.idea
+
+/.gradle
+
+/build
+
+/data

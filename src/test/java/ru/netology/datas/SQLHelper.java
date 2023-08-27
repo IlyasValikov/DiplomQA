@@ -1,15 +1,16 @@
 package ru.netology.datas;
 
 import lombok.SneakyThrows;
+import lombok.val;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.DriverManager;
 
 public class SQLHelper {
-    private static String url = System.getProperty("db.url");
-    private static String user = System.getProperty("db.user");
-    private static String password = System.getProperty("db.password");
+    private static final String url = System.getProperty("db.url");
+    private static final String user = System.getProperty("db.user");
+    private static final String password = System.getProperty("db.password");
 
     @SneakyThrows
     public static void clearDB() {
@@ -26,9 +27,10 @@ public class SQLHelper {
 
     @SneakyThrows
     public static String getPaymentStatus() {
-        var codesSQL = "SELECT status FROM payment_entity;";
-        return getData(codesSQL);
-    }
+            var codesSQL = "SELECT status FROM payment_entity;";
+            return getData(codesSQL);
+        }
+
 
     @SneakyThrows
     public static String getCreditRequestStatus() {
